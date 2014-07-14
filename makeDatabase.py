@@ -1,48 +1,69 @@
+"""
+This module creates the database required for SVM. 
+It creates a Feature vector for each image in ./Train/
+directory and appropriate label vector to label the 
+features.
+"""
+
 import os
 import numpy as np
 import cv2
 import pickle
+import sys
 
-path = os.getcwd()
-center = open("centerFinal.p","rb")
-Centers = pickle.load(center)
-center.close()
-os.chdir(path + '/'+'Train')  #Change Directory
-parentdir = os.getcwd()  #Get current Directory
-ptlistdir = os.listdir(parentdir)
+def makeDatabase(histSize):
+	"""
+	This function finds SIFT descriptor for each image in ./Train/
+	directory. It finds the similarity between extracted features 
+	and cluster centers from centerFinal.p. It creates a histogram 
+	to check number of features mapped to particular cluster center. 
+	These are feature vector of images which are appedned and dumped 
+	to Database.p file.
+	"""
+	path = os.getcwd()
+	Center = open("centerFinal.p","rb") #: File pointer for centers file
+	centers = pickle.load(Center)
+	Center.close()
+	os.chdir(path + '/'+'Train')
+	parentdir = path + '/'+'Train'		#: Parent directory of images folders
+	ptlistdir = os.listdir(parentdir)	#: List of folders in parent directory
 
-bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False) #create BFMatcher Object
-sift =cv2.SIFT()  #intialize sift object
-Hist_nm = []
-temp_array = []
-label = []
-for x in range(0,len(ptlistdir)):
-    childdir = parentdir +'/'+ ptlistdir[x] 
-    childdir_cpy = childdir
-    os.chdir(childdir)
-    cllistdir = os.listdir(childdir)
-    print('In '+ptlistdir[x])
-    for y in range(0,len(cllistdir)):
-        label.append(x)
-        Histogram = [0]*500
-        Histogram = [ float(i) for i in Histogram ]
-        childdir_cpy = childdir + '/' + cllistdir[y]
-        img = cv2.imread(childdir_cpy,0)
-        print(childdir_cpy)
-        kp, desc = sift.detectAndCompute(img,None)  #Computing Sift Keypoints and Descriptor's
-        #len_desc = len(kp)
-        #len_desc = len_desc/2
-        matches = bf.match(desc,Centers) #Matching Feature
-        print(childdir_cpy)
-        for i in matches:
-            Histogram[i.trainIdx]+=1
-        #Histogram = [j/len_desc for j in Histogram]
-        temp_array.append(Histogram)
-        del Histogram
+	bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False) # Create BFMatcher Object
+	sift =cv2.SIFT()	# Intialize sift object
+	feat_array = []		#: Populator for features
+	label = []			#: Labels for images, unique for each object
 
-os.chdir(path)
-center.close()
-Database = open("Database.p","wb")
-pickle.dump(temp_array,Database)
-pickle.dump(label,Database)
-Database.close()
+	for x in range(0,len(ptlistdir)):
+	    childdir = parentdir +'/'+ ptlistdir[x]		#: Path of child directory
+	    childdir_cpy = childdir 		#: Copy of child directory path
+	    os.chdir(childdir)
+	    cllistdir = os.listdir(childdir)	#: List of images in child directory
+	    print('In '+ptlistdir[x])
+	    for y in range(0,len(cllistdir)):
+	        label.append(x)		#Append same label for all images in same folder
+	        Histogram = [0]*int(histSize)
+	        childdir_cpy = childdir + '/' + cllistdir[y]
+	        print(childdir_cpy)
+	        img = cv2.imread(childdir_cpy)	#Read Image
+	        gray= cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)	#Convert to gray
+	        kp, desc = sift.detectAndCompute(img,None)	#Computing Sift Keypoints and Descriptors
+	        matches = bf.match(desc,centers)	#Matching Feature
+	        print(childdir_cpy)
+	        for i in matches:
+	            Histogram[i.trainIdx]+=1	#Calculate histogram
+	        feat_array.append(Histogram)
+	        del Histogram
+	os.chdir(path)
+	Center.close()
+
+	Database = open("Database.p","wb")
+	pickle.dump(feat_array,Database)	#Dump features to file
+	pickle.dump(label,Database)		#Dump labels to file
+	Database.close()
+
+if __name__ == '__main__':
+    if(len(sys.argv)!=2):
+        print('Error. Usage: python makeDatabase.p histogramSize')
+        print('Hint : histogramSize is same as number of centers')
+    else:
+        makeDatabase(sys.argv[1])
