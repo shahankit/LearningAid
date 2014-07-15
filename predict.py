@@ -50,7 +50,7 @@ def featuresAndLabels():
 			print(j)
 			img = cv2.imread(j)
 			gray= cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)     
-			kp, desc = sift.detectAndCompute(img, None)
+			kp, desc = sift.detectAndCompute(gray, None)
 			matches = bf.match(desc, center)
 			Histogram = [0]*int(histSize)
 			for i in matches:
