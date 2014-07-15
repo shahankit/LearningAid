@@ -46,7 +46,7 @@ def makeDatabase(histSize):
 	        print(childdir_cpy)
 	        img = cv2.imread(childdir_cpy)	#Read Image
 	        gray= cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)	#Convert to gray
-	        kp, desc = sift.detectAndCompute(img,None)	#Computing Sift Keypoints and Descriptors
+	        kp, desc = sift.detectAndCompute(gray,None)	#Computing Sift Keypoints and Descriptors
 	        matches = bf.match(desc,centers)	#Matching Feature
 	        print(childdir_cpy)
 	        for i in matches:
