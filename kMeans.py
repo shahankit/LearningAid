@@ -7,6 +7,7 @@ each descriptor file. The cluster centers are saved to
 
 import numpy as np
 import cv2
+from cv2 import __version__
 import pickle
 import os
 import sys
@@ -31,7 +32,7 @@ def kMeans(nCenters):
 
 	os.chdir('Desc/')
 
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER, 10,0.8)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER, 10, 0.0001)
 
 	for i in os.listdir(os.getcwd()):
 	    Desc = open(i,"rb") #: File pointer for descriptor file
@@ -42,8 +43,11 @@ def kMeans(nCenters):
 	            des = pickle.load(Desc)		#: Read descriptor into des(numpy array)
 	            print(np.shape(des))
 
-	            #Remove third parameter if you are using opencv 2.4.9 or lesser.
-	            ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
+	            #Checking the version of opencv..
+	            if __version__[0] == '3':
+	            	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
+	            else:
+	            	ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
 	            del des
 	            center = np.vstack((center,center1))	#: Append cluster centers
 	            print(np.shape(center))
@@ -53,8 +57,12 @@ def kMeans(nCenters):
 	    del center1
 	    des = np.float32(center)	#Convert to float, required by kmeans
 	    print(np.shape(des))
-	    #Remove third parameter if you are using opencv 2.4.9 or lesser.
-	    ret,label,center=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
+	    
+	    #Checking the version of opencv..
+	    if __version__[0] == '3':
+	    	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
+	    else:
+	        ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
 
 	    Center = open(path+"/Centers/"+i,"wb")	#: File pointer for centers file
 	    pickle.dump(center,Center)  #: Save cluster centers to file
