@@ -29,7 +29,7 @@ def featuresAndLabels():
 	center = pickle.load(Center)	#: Load centers
 
 	sift = cv2.SIFT()	# Initalize SIFT object
-	bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)	# Create BFMatcher object
+	bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)	# Create BFMatcher object
 
 	path = os.getcwd()
 
