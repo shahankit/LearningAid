@@ -28,7 +28,7 @@ def makeDatabase(histSize):
 	parentdir = path + '/'+'Train'		#: Parent directory of images folders
 	ptlistdir = os.listdir(parentdir)	#: List of folders in parent directory
 
-	bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False) # Create BFMatcher Object
+	bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False) # Create BFMatcher Object
 	sift =cv2.SIFT()	# Intialize sift object
 	feat_array = []		#: Populator for features
 	label = []			#: Labels for images, unique for each object
