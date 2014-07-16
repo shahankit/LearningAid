@@ -7,7 +7,6 @@ each descriptor file. The cluster centers are saved to
 
 import numpy as np
 import cv2
-from cv2 import __version__
 import pickle
 import os
 import sys
@@ -44,7 +43,7 @@ def kMeans(nCenters):
 	            print(np.shape(des))
 
 	            #Checking the version of opencv..
-	            if __version__[0] == '3':
+	            if cv2.__version__[0] == '3':
 	            	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
 	            else:
 	            	ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
@@ -59,7 +58,7 @@ def kMeans(nCenters):
 	    print(np.shape(des))
 	    
 	    #Checking the version of opencv..
-	    if __version__[0] == '3':
+	    if cv2.__version__[0] == '3':
 	    	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
 	    else:
 	        ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
