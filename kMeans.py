@@ -27,50 +27,42 @@ def kMeans(nCenters):
 
 	#Create directory Center if it does not exists
 	if not os.path.exists('Centers'):
-	    os.makedirs('Centers')
+		os.makedirs('Centers')
 
 	os.chdir('Desc/')
 
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER, 10, 0.0001)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 20, 0.0001)
 
 	for i in os.listdir(os.getcwd()):
-	    Desc = open(i,"rb") #: File pointer for descriptor file
-	    center = np.zeros((0,128))	#: Populator for cluster centers
+		Desc = open(i,"rb") #: File pointer for descriptor file
+		center = np.zeros((0,128))	#: Populator for cluster centers
 
-	    while 1:
-	        try:                    
-	            des = pickle.load(Desc)		#: Read descriptor into des(numpy array)
-	            print(np.shape(des))
+		while 1:
+			try:                    
+				des = pickle.load(Desc)		#: Read descriptor into des(numpy array)
+				print(np.shape(des))
 
-	            #Checking the version of opencv..
-	            if cv2.__version__[0] == '3':
-	            	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
-	            else:
-	            	ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
-	            del des
-	            center = np.vstack((center,center1))	#: Append cluster centers
-	            print(np.shape(center))
-	        except EOFError:
-	            break		#: Detect End of file and break while loop
-	    
-	    del center1
-	    des = np.float32(center)	#Convert to float, required by kmeans
-	    print(np.shape(des))
-	    
-	    #Checking the version of opencv..
-	    if cv2.__version__[0] == '3':
-	    	ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
-	    else:
-	        ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
-
-	    Center = open(path+"/Centers/"+i,"wb")	#: File pointer for centers file
-	    pickle.dump(center,Center)  #: Save cluster centers to file
-	    Center.close()
-	    Desc.close()
+				#Checking the version of opencv..
+				if cv2.__version__[0] == '3':
+					ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,50,cv2.KMEANS_PP_CENTERS)
+				else:
+					ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,50,cv2.KMEANS_PP_CENTERS)
+				del des
+				center = np.vstack((center,center1))	#: Append cluster centers
+				print(np.shape(center))
+			except EOFError:
+				break		#: Detect End of file and break while loop
+		
+		del center1
+		
+		Center = open(path+"/Centers/"+i,"wb")	#: File pointer for centers file
+		pickle.dump(center,Center)  #: Save cluster centers to file
+		Center.close()
+		Desc.close()
 	del path
 
 if __name__ == '__main__':
 	if(len(sys.argv)!=2):
-	    print('Error. Usage: python kMeans.py numCenters')
+		print('Error. Usage: python kMeans.py numCenters')
 	else:
-	    kMeans(sys.argv[1])
+		kMeans(sys.argv[1])
