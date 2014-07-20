@@ -31,7 +31,7 @@ def kMeans(nCenters):
 
 	os.chdir('Desc/')
 
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100, 0.0001)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100, 0.00001)
 
 	for i in os.listdir(os.getcwd()):
 		Desc = open(i,"rb") #: File pointer for descriptor file

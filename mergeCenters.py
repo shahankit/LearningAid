@@ -28,7 +28,7 @@ def mergeCenters(nCenters):
 
 	center = np.float32(center)
 	print (np.shape(center))
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100,0.0001)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100,0.00001)
 	#Checking version of opencv..
 	if cv2.__version__[0] == '3':
 		ret,label,center=cv2.kmeans(center,int(nCenters),None,criteria,10,cv2.KMEANS_PP_CENTERS)
