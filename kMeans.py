@@ -31,7 +31,7 @@ def kMeans(nCenters):
 
 	os.chdir('Desc/')
 
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 20, 0.0001)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100, 0.0001)
 
 	for i in os.listdir(os.getcwd()):
 		Desc = open(i,"rb") #: File pointer for descriptor file
@@ -44,9 +44,9 @@ def kMeans(nCenters):
 
 				#Checking the version of opencv..
 				if cv2.__version__[0] == '3':
-					ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,5,cv2.KMEANS_PP_CENTERS)
+					ret,label,center1=cv2.kmeans(des,int(nCenters),None,criteria,10,cv2.KMEANS_PP_CENTERS)
 				else:
-					ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,5,cv2.KMEANS_PP_CENTERS)
+					ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,10,cv2.KMEANS_PP_CENTERS)
 				del des
 				center = np.vstack((center,center1))	#: Append cluster centers
 				print(np.shape(center))
