@@ -28,12 +28,12 @@ def mergeCenters(nCenters):
 
 	center = np.float32(center)
 	print (np.shape(center))
-	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 30,0.0001)
+	criteria = (cv2.TERM_CRITERIA_MAX_ITER+cv2.TERM_CRITERIA_EPS, 100,0.0001)
 	#Checking version of opencv..
 	if cv2.__version__[0] == '3':
-		ret,label,center=cv2.kmeans(center,int(nCenters),None,criteria,5,cv2.KMEANS_PP_CENTERS)
+		ret,label,center=cv2.kmeans(center,int(nCenters),None,criteria,10,cv2.KMEANS_PP_CENTERS)
 	else:
-		ret,label,center=cv2.kmeans(center,int(nCenters),criteria,5,cv2.KMEANS_PP_CENTERS)
+		ret,label,center=cv2.kmeans(center,int(nCenters),criteria,10,cv2.KMEANS_PP_CENTERS)
 
 	CenterFinal = open(path+'/centerFinal.p',"wb")#: File pointer for final centers file
 	pickle.dump(center, CenterFinal)	#Dump centers to file
