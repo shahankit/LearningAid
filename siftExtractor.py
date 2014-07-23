@@ -54,7 +54,8 @@ def siftExtractor():
 	        #Populate descriptors one after other. 
 	        #extends is used so that there is no distinction or sub array boundaries
 	        #between descriptors of images.
-	        temp_array.extend(desc)
+	        if desc is not None:
+	        	temp_array.extend(desc)
 	        if(i==1 and y>num):	
 	        	pickle.dump(np.array(temp_array),Keypt)		#Dump first half to file
 	        	temp_array = []
