@@ -1,0 +1,15 @@
+Centers/*
+Database.p
+Desc/*
+Failed/*
+Test/*
+Train/*
+centerFinal.p
+kMeans.pyc
+makeDatabase.pyc
+mergeCenters.pyc
+model.model
+predict.pyc
+run.sh~
+siftExtractor.pyc
+svmTrain.pyc
