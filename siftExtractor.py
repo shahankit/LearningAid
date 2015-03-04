@@ -30,6 +30,7 @@ def siftExtractor():
 	os.chdir(path + '/'+'Train')
 	parentdir = path + '/'+'Train'		#: Parent directory of images folders
 	ptlistdir = os.listdir(parentdir)	#: List of folders in parent directory
+	ptlistdir.sort()
 
 	sift = cv2.SIFT()		#: intialize sift object
 	os.chdir(path)
@@ -38,7 +39,9 @@ def siftExtractor():
 	    childdir = parentdir +'/'+ ptlistdir[x]		#: Path of child directory
 	    childdir_cpy = childdir		#: Copy of child directory path
 	    os.chdir(childdir)
-	    cllistdir = os.listdir(childdir)	#: List of images in child directory
+	    cllistdir = os.listdir(childdir)		#: List of images in child directory
+	    cllistdir.sort()
+
 	    Keypt = open(path+'/Desc/'+ptlistdir[x]+'.p',"wb")	#: File pointer for descriptor file
 	    num = len(cllistdir)/2
 	    i = 1

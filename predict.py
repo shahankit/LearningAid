@@ -43,10 +43,17 @@ def featuresAndLabels():
 	c = 0		#: Maintains count for labels
 	testSet = []	#: Populator for test features
 	label = []		#: Populator for true labels
-	for i in os.listdir(os.getcwd()):
+
+	parentList = os.listdir(os.getcwd())
+	parentList.sort()
+
+	for i in parentList:
 		os.chdir(path+'/Test/'+i)
 		print(i)
-		for j in os.listdir(os.getcwd()):
+		childList = os.listdir(os.getcwd())
+		childList.sort()
+
+		for j in childList:
 			print(j)
 			img = cv2.imread(j)
 			gray= cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)     
@@ -78,11 +85,17 @@ def predict():
 	#Copy wrongly recognized images to ./Failed directory.
 	c=0
 	os.chdir(path+'/Test/')
-	for i in os.listdir(os.getcwd()):
+	parentList = os.listdir(os.getcwd())
+	parentList.sort()
+
+	for i in parentList:
 		os.chdir(path+'/Test/'+i)
 		os.makedirs(path+'/Failed/'+i)
 		print(i)
-		for j in os.listdir(os.getcwd()):
+		childList = os.listdir(os.getcwd())
+		childList.sort()
+
+		for j in childList:
 			if(p_label[c] != label[c]):		#Check predicted label and true label
 				shutil.copy(j,path+'/Failed/'+i+'/')
 			c+=1

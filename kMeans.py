@@ -36,6 +36,8 @@ def kMeans(nCenters):
 	for i in os.listdir(os.getcwd()):
 		Desc = open(i,"rb") #: File pointer for descriptor file
 		center = np.zeros((0,128))	#: Populator for cluster centers
+		
+		print(i)
 
 		while 1:
 			try:                    
@@ -49,7 +51,6 @@ def kMeans(nCenters):
 					ret,label,center1=cv2.kmeans(des,int(nCenters),criteria,10,cv2.KMEANS_PP_CENTERS)
 				del des
 				center = np.vstack((center,center1))	#: Append cluster centers
-				print(np.shape(center))
 			except EOFError:
 				break		#: Detect End of file and break while loop
 		

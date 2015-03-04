@@ -26,7 +26,8 @@ def makeDatabase(histSize):
 	Center.close()
 	os.chdir(path + '/'+'Train')
 	parentdir = path + '/'+'Train'		#: Parent directory of images folders
-	ptlistdir = os.listdir(parentdir)	#: List of folders in parent directory
+	ptlistdir = os.listdir(parentdir)	#: List of folders in parent directory sorted
+	ptlistdir.sort()
 
 	bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False) # Create BFMatcher Object
 	sift =cv2.SIFT()	# Intialize sift object
@@ -37,7 +38,9 @@ def makeDatabase(histSize):
 	    childdir = parentdir +'/'+ ptlistdir[x]		#: Path of child directory
 	    childdir_cpy = childdir 		#: Copy of child directory path
 	    os.chdir(childdir)
-	    cllistdir = os.listdir(childdir)	#: List of images in child directory
+	    cllistdir = os.listdir(childdir)	#: List of images in child directory sorted
+	    cllistdir.sort()
+	    
 	    print('In '+ptlistdir[x])
 	    for y in range(0,len(cllistdir)):
 	        label.append(x)		#Append same label for all images in same folder
