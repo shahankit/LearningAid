@@ -1,5 +1,7 @@
-if [ $1 = "" ]; then
+if [ -z "$1" ]
+then
 	echo "Error: Must pass number of centers as argument"
+	exit 0
 fi
 python siftExtractor.py
 python kMeans.py $1
